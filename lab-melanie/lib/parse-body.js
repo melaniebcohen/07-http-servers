@@ -9,7 +9,7 @@ module.exports = function(req, callback) {
 
   req.on('end', function() {
     try {
-      req.body = JSON.parsse(req.body);
+      req.body = JSON.parse(req.body);
       callback(null, req.body);
     } catch (err) {
       callback(err);

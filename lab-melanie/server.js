@@ -25,23 +25,27 @@ const server = http.createServer(function(req, res) {
       res.end();
     }
     if (!params.text) {
-      res.writeHead(400, { 'Content-Type': 'text/plain' })
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write(cowsay.say({ text: 'bad request' }));
       res.end();
     }
   }
 
   if (req.method === 'POST' && req.url.pathname === '/cowsay') {
-    parseBody(req.body.text, function(err) {
-      if (err) throw new Error('this isnt working yo');
-      res.writeHead(400, { 'Content-Type': 'text/plain' })
-      res.write(cowsay.say({ text: req.body.text }));
+    parseBody(req, function(err) {
+      if (err) return console.error(err);
+      if (req.body.message) {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.write(cowsay.say({ text: req.body.message }));
+      } else {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.write(cowsay.say({ text: 'bad request' }));
+      }
       res.end();
     });
   }
-  res.end();
 });
 
 server.listen(PORT, () => {
-  console.log(`Server is listening on PORT: ${PORT}`)
-})
+  console.log(`Server is listening on PORT: ${PORT}`);
+});

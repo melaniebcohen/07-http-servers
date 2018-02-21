@@ -44,6 +44,20 @@ const server = http.createServer(function(req, res) {
       res.end();
     });
   }
+
+  if (req.method === 'GET' && req.url.pathname === '/cowsay_type') {
+    let params = req.url.query;
+    if (params.text) {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.write(cowsay.say({ text: params.text, f: params.f }));
+      res.end();
+    }
+    if (!params.text) {
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
+      res.write(cowsay.say({ text: 'bad request' }));
+      res.end();
+    }
+  }
 });
 
 server.listen(PORT, () => {
